@@ -2,6 +2,8 @@
 
 I used SQL to explore the 2023 job market for **remote data analyst roles**. I wanted to know which roles pay best, which skills they ask for, and which skills are both in demand and well paid.
 
+I built it while following Luke Barousse's *SQL for Data Analytics* course, which provided the dataset and the first five questions. I then added a sixth question of my own on the **UK job market**, where I'm looking for work.
+
 ## Questions
 
 1. What are the top-paying remote data analyst jobs?
@@ -9,6 +11,7 @@ I used SQL to explore the 2023 job market for **remote data analyst roles**. I w
 3. Which skills are most in demand for data analysts?
 4. Which skills are linked to the highest salaries?
 5. Which skills are worth learning first because they're both in demand and well paid?
+6. **(My extension)** What skills do UK data analyst and business analyst roles ask for?
 
 ## Tools
 
@@ -28,6 +31,12 @@ The data is about 788,000 job postings from 2023, stored in four tables in a sta
 | `skills_job_dim` | Links each posting to the skills it asks for |
 
 The scripts in [`sql_load/`](sql_load) create the database and tables and load the data.
+
+### How to run it
+
+1. Get the four CSV files from the course materials. They're not stored in this repo because of their size.
+2. Run the scripts in `sql_load/` in order, updating the file paths in `3_modify_tables.sql` to where you saved the CSVs.
+3. Run any query in `Project_sql/`.
 
 ## The analysis
 
@@ -83,12 +92,24 @@ Combines demand counts and average salary (two CTEs joined on skill) for skills 
 
 > Note: SAS appears twice in the raw results because it has two skill IDs in `skills_dim`. The chart shows it once.
 
+### 6. UK data analyst vs. business analyst skills ([query](Project_sql/6_uk_analyst_skills.sql))
+My own extension. It filters to UK postings for the two roles, counts how many list each skill, and divides by the total for each role, so a 10,509-posting group and an 824-posting group can be compared fairly.
+
+![Top skills in UK data analyst vs. business analyst postings](assets/6_uk_analyst_skills.png)
+
+- **SQL** is the top skill for both roles, and appears in more business analyst postings (46.5%) than data analyst ones (42.6%).
+- **Excel** (35–41%) and **Power BI** (27–31%) come next. Power BI is more common than Tableau in the UK for both roles, unlike the remote market above.
+- **Python** appears in about 1 in 5 postings, so it's useful but not essential for UK analyst roles.
+- Business analyst roles ask for **SAS** (12.6%) and **Azure** (9.7%) more often than data analyst roles do.
+- Only 77 of these UK postings list a salary, so this question looks at demand, not pay.
+
 ## SQL techniques used
 
 - `INNER JOIN` and `LEFT JOIN` across fact and dimension tables
 - Common table expressions (`WITH`) to build queries step by step
 - Aggregation with `COUNT`, `AVG`, `ROUND` and `GROUP BY`
 - Filtering with `WHERE` and `IS NOT NULL`, sorting with `ORDER BY` and `LIMIT`
+- `CASE WHEN` inside aggregates to put two roles side by side as columns, with percentages calculated from separate totals
 
 ## What I learned
 
@@ -104,6 +125,8 @@ For remote data analyst roles:
 - **SQL** is the most in-demand skill.
 - **SQL, Python and a visualisation tool (Tableau or Power BI)** make up the core toolkit.
 - The highest salaries go to analysts who add **cloud and data engineering** skills such as Snowflake, Azure, AWS and PySpark.
+
+In the UK, **SQL, Excel and Power BI** lead for both data and business analyst roles. That matches the skills I'm building for business analyst work.
 
 I'm using this to shape my own development alongside my background in supply chain and procurement.
 
